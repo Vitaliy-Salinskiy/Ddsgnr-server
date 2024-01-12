@@ -8,7 +8,6 @@ import { User, UserSchema } from './schemas/user.schema';
 import { FilesModule } from 'src/files/files.module';
 
 @Module({
-	controllers: [UsersController],
 	imports: [
 		MulterModule.registerAsync({
 			useFactory: () => ({
@@ -18,6 +17,8 @@ import { FilesModule } from 'src/files/files.module';
 		MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
 		FilesModule
 	],
+	controllers: [UsersController],
 	providers: [UsersService],
+	exports: [UsersService]
 })
 export class UsersModule { }

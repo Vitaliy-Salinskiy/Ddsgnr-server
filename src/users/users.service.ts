@@ -60,6 +60,20 @@ export class UsersService {
 		}
 	}
 
+	async findOneByProperties(username: string): Promise<UserDocument> {
+		try {
+			const user = await this.userRepository.findOne({ username, }).exec();
+
+			if (!user) {
+				throw new HttpException(`User with username: ${username} not found`, HttpStatus.NOT_FOUND)
+			}
+
+			return user;
+		} catch (error: any) {
+			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+		}
+	}
+
 	async update(id: string, updateUserDto: UpdateUserDto, image?: Express.Multer.File): Promise<UserDocument> {
 		try {
 			const user = await this.userRepository.findById(id).exec();
