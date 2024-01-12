@@ -1,8 +1,12 @@
-import { UserDocument } from "src/users/schemas/user.schema";
-
-export interface IDeleteUserMessage {
+export interface IDeleteMessage<T> {
 	message: string;
 	data: {
-		user: UserDocument;
+		deletedItem: T;
 	};
+}
+
+export enum ProductType {
+	man = "man",
+	woman = "woman",
+	kid = "kid"
 }

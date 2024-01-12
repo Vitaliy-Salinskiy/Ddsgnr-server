@@ -6,7 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
-import { IDeleteUserMessage } from 'src/interfaces';
+import { IDeleteMessage } from 'src/interfaces';
 import { FilesService } from 'src/files/files.service';
 
 @Injectable()
@@ -92,7 +92,7 @@ export class UsersService {
 		}
 	}
 
-	async remove(id: string): Promise<IDeleteUserMessage> {
+	async remove(id: string): Promise<IDeleteMessage<UserDocument>> {
 		try {
 			const user = await this.userRepository.findById(id).exec();
 
@@ -106,7 +106,7 @@ export class UsersService {
 
 			const deletedUser = await this.userRepository.findByIdAndDelete(id).exec();
 
-			return { message: `User with id: ${id} was deleted`, data: { user: deletedUser } };
+			return { message: `User with id: ${id} was deleted`, data: { deletedItem: deletedUser } };
 		} catch (error: any) {
 			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

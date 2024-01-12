@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { FilesModule } from './files/files.module';
 		}),
 		UsersModule,
 		FilesModule,
+		ProductsModule,
 	],
 	controllers: [],
 	providers: [],
