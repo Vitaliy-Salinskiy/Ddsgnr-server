@@ -14,11 +14,14 @@ export class User {
 	@Prop({ type: String, required: true, trim: true })
 	password: string;
 
-	@Prop({ type: Date, default: Date.now })
-	createdAt: Date;
+	@Prop({ type: String, required: true, unique: true, trim: true })
+	email: string;
 
 	@Prop({ type: String })
 	image: string;
+
+	@Prop({ type: Date, default: Date.now })
+	createdAt: Date;
 
 }
 

@@ -11,36 +11,23 @@ export class FilesService {
 			const newFilePath: string = path.join(path.dirname(file.path), newFileName);
 			fs.renameSync(file.path, newFilePath);
 			file.path = newFilePath;
-			return newFileName;
+			return file.path;
 		} catch (error) {
 			throw new Error(`New file not stored: ${file}`);
 		}
 	}
 
-	updateFile(oldImagePath: string, newImagePath: string): boolean {
-		try {
-			if (fs.existsSync(oldImagePath)) {
-				fs.unlinkSync(oldImagePath);
-			}
-			if (fs.existsSync(newImagePath)) {
-				fs.renameSync(newImagePath, oldImagePath);
-				return true;
-			} else {
-				throw new Error(`New file not found: ${newImagePath}`);
-			}
-		} catch (error: any) {
-			throw new Error(`Error updating file: ${error.message}`);
-		}
-	}
-
 	deleteFile(imagePath: string): boolean {
-		if (!fs.existsSync(imagePath)) {
+		const baseDir = process.cwd();
+		const fullOldImagePath = path.join(baseDir, imagePath);
+
+		if (!fs.existsSync(fullOldImagePath)) {
 			console.log(`File not found: ${imagePath}`);
 			return false;
 		}
 
 		try {
-			fs.unlinkSync(imagePath);
+			fs.unlinkSync(fullOldImagePath);
 			return true;
 		} catch (error: any) {
 			throw new Error(`Error deleting image: ${error.message}`);
