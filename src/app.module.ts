@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { FilesModule } from './files/files.module';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
 	imports: [
@@ -50,8 +51,7 @@ import { AuthModule } from './auth/auth.module';
 		FilesModule,
 		ProductsModule,
 		AuthModule,
+		MailModule,
 	],
-	controllers: [],
-	providers: [],
 })
 export class AppModule { }

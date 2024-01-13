@@ -3,6 +3,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { FilesModule } from 'src/files/files.module';
+import { MailService } from 'src/mail/mail.service';
+import { MailModule } from 'src/mail/mail.module';
 import { ProductsController } from './products.controller';
 import { Product, ProductSchema } from './schemas/product.schema';
 import { ProductsService } from './products.service';
@@ -17,7 +19,8 @@ import { ProductsService } from './products.service';
 		}),
 		MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
 		FilesModule,
+		MailModule
 	],
-	providers: [ProductsService],
+	providers: [ProductsService, MailService],
 })
 export class ProductsModule { }
