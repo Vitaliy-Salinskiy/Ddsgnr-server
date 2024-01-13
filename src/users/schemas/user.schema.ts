@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
-import { HydratedDocument } from "mongoose"
+import { HydratedDocument, Types } from "mongoose"
+import { Product } from "src/products/schemas/product.schema";
 
 export type UserDocument = HydratedDocument<User>;
 
 @Schema()
 export class User {
 
-	readonly _id: string;
+	readonly _id: Types.ObjectId;
 
 	@Prop({ type: String, required: true, unique: true, trim: true })
 	username: string;
@@ -22,6 +23,9 @@ export class User {
 
 	@Prop({ type: Date, default: Date.now })
 	createdAt: Date;
+
+	@Prop({ type: [{ type: Types.ObjectId, ref: Product.name }], default: [] })
+	cart: Types.ObjectId[]
 
 }
 

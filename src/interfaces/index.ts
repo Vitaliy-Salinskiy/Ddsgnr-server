@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface IDeleteMessage<T> {
 	message: string;
 	data: {
@@ -6,7 +8,7 @@ export interface IDeleteMessage<T> {
 }
 
 export interface IPayload {
-	sub: string;
+	sub: Types.ObjectId;
 	username: string;
 	email: string;
 }

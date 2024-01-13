@@ -10,7 +10,6 @@ import { Product, ProductSchema } from './schemas/product.schema';
 import { ProductsService } from './products.service';
 
 @Module({
-	controllers: [ProductsController],
 	imports: [
 		MulterModule.registerAsync({
 			useFactory: () => ({
@@ -21,6 +20,8 @@ import { ProductsService } from './products.service';
 		FilesModule,
 		MailModule
 	],
+	controllers: [ProductsController],
 	providers: [ProductsService, MailService],
+	exports: [ProductsService]
 })
 export class ProductsModule { }
