@@ -1,7 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductsController {
