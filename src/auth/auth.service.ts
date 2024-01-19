@@ -81,4 +81,17 @@ export class AuthService {
 		}
 	}
 
+	async resetPassword(email: string, password: string) {
+		try {
+			const user = await this.userService.findOneByEmail(email);
+			if (!user) {
+				throw new Error(`User with this email: ${email} not found`);
+			}
+			await this.userService.resetPassword(user._id.toString(), password);
+			return { message: "Password reset successfully" };
+		} catch (error) {
+			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

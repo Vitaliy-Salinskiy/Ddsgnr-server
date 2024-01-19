@@ -14,6 +14,7 @@ export class ProductsService {
 
 	async create(createProductDto: CreateProductDto, images: Array<Express.Multer.File>): Promise<Product> {
 		try {
+			createProductDto.images = [];
 			images.forEach(image => {
 				createProductDto.images.push(this.fileService.fileToWebp(image));
 			})
