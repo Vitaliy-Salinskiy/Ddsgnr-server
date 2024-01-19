@@ -4,6 +4,6 @@ export class CreateProductDto {
 	readonly name: string;
 	readonly brand: string;
 	price: number;
-	image?: string;
+	images?: string[];
 	readonly type: ProductType;
 }

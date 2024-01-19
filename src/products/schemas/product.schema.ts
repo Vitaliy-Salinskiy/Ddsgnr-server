@@ -19,8 +19,8 @@ export class Product {
 	@Prop({ type: Number, required: true })
 	price: number;
 
-	@Prop({ type: String, required: true })
-	image: string;
+	@Prop({ type: [{ type: String, required: true }] })
+	images: string[];
 
 	@Prop({ type: String, required: true, trim: true, enum: ProductType })
 	type: ProductType;

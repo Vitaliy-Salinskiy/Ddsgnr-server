@@ -10,6 +10,8 @@ import { ProductsModule } from './products/products.module';
 import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { CartModule } from './cart/cart.module';
+import { OtpService } from './otp/otp.service';
+import { OtpModule } from './otp/otp.module';
 
 @Module({
 	imports: [
@@ -54,6 +56,8 @@ import { CartModule } from './cart/cart.module';
 		AuthModule,
 		MailModule,
 		CartModule,
+		OtpModule,
 	],
+	providers: [OtpService],
 })
 export class AppModule { }

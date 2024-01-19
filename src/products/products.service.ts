@@ -12,9 +12,11 @@ export class ProductsService {
 
 	constructor(@InjectModel(Product.name) private productRepository: Model<Product>, private fileService: FilesService) { }
 
-	async create(createProductDto: CreateProductDto, image: Express.Multer.File): Promise<Product> {
+	async create(createProductDto: CreateProductDto, images: Array<Express.Multer.File>): Promise<Product> {
 		try {
-			createProductDto.image = this.fileService.fileToWebp(image);
+			images.forEach(image => {
+				createProductDto.images.push(this.fileService.fileToWebp(image));
+			})
 			const product = (await this.productRepository.create(createProductDto)).save();
 			return product;
 		} catch (error: any) {
@@ -53,7 +55,9 @@ export class ProductsService {
 				throw new HttpException(`Product with id: ${id} not found`, HttpStatus.NOT_FOUND);
 			}
 
-			this.fileService.deleteFile(product.image);
+			product.images.forEach((image) => {
+				this.fileService.deleteFile(image);
+			})
 
 			const deletedProduct = await this.productRepository.findByIdAndDelete(id).exec();
 

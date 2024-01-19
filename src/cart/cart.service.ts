@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Types } from 'mongoose';
 
 import { ProductsService } from 'src/products/products.service';
 import { UserDocument } from 'src/users/schemas/user.schema';

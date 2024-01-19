@@ -63,10 +63,24 @@ export class UsersService {
 
 	async findOneByProperties(username: string): Promise<UserDocument> {
 		try {
-			const user = await this.userRepository.findOne({ username, }).exec();
+			const user = await this.userRepository.findOne({ username }).exec();
 
 			if (!user) {
 				throw new HttpException(`User with username: ${username} not found`, HttpStatus.NOT_FOUND)
+			}
+
+			return user;
+		} catch (error: any) {
+			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+		}
+	}
+
+	async findOneByEmail(email: string): Promise<UserDocument> {
+		try {
+			const user = await this.userRepository.findOne({ email }).exec();
+
+			if (!user) {
+				throw new HttpException(`User with email: ${email} not found`, HttpStatus.NOT_FOUND)
 			}
 
 			return user;

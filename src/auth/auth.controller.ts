@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Request, Res, UseGuards } from '@nestjs/common';
-import { Response } from "express"
+import { Body, Controller, Get, HttpException, HttpStatus, Post, Req, Request, Res, UseGuards, } from '@nestjs/common';
+import { Response, Request as ExpressRequest } from "express"
 
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -15,7 +15,7 @@ export class AuthController {
 		try {
 			const loginResult = await this.authService.login(req.user);
 			if (loginResult) {
-				res.cookie("access_token", loginResult.access_token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
+				res.cookie("ddsgnr_access_token", loginResult.access_token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
 				return res.json(loginResult);
 			}
 			return res.json(loginResult);
@@ -28,6 +28,30 @@ export class AuthController {
 	@Get("profile")
 	getProfile(@Request() req: any) {
 		return req.user;
+	}
+
+	@Post('otp')
+	async sendOtp(@Body('email') email: string, @Res() response: Response) {
+		const mailResponse = await this.authService.sendOtp(email);
+		response.cookie("ddsgnr_otp", mailResponse.otpToken, { httpOnly: true, maxAge: 5 * 60 * 1000 });
+		return response.send(mailResponse);
+	}
+
+	@Post('validate-otp')
+	async validateOtp(@Body("otp") otp: string, @Req() request: ExpressRequest, @Res() response: Response) {
+		try {
+			const token = await request.cookies['ddsgnr_otp'];
+			if (!token) {
+				return { message: "OTP token not found, please request a new OTP" }
+			}
+			const validateResponse = await this.authService.validateOtp(otp, token);
+			if (validateResponse === true) {
+				response.cookie("ddsgnr_otp", null, { httpOnly: true, maxAge: 0 });
+			}
+			return response.send(validateResponse);
+		} catch (error) {
+			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

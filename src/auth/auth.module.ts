@@ -8,6 +8,8 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { OtpModule } from 'src/otp/otp.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
 	imports: [
@@ -21,7 +23,9 @@ import { AuthService } from './auth.service';
 		}),
 		UsersModule,
 		PassportModule,
-		ConfigModule
+		ConfigModule,
+		OtpModule,
+		MailModule
 	],
 	controllers: [AuthController],
 	providers: [AuthService, LocalStrategy, JwtStrategy],

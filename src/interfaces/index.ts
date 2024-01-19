@@ -11,6 +11,7 @@ export interface IPayload {
 	sub: Types.ObjectId;
 	username: string;
 	email: string;
+	image: string;
 }
 
 export enum ProductType {
