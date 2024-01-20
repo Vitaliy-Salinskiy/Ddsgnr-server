@@ -141,7 +141,7 @@ export class UsersService {
 		}
 	}
 
-	async resetPassword(id, newPassword: string) {
+	async resetPassword(id: string, newPassword: string) {
 		try {
 			const newHashedPassword = await bcrypt.hash(newPassword, 10);
 			const updatedUser = await this.userRepository.findByIdAndUpdate(id, { password: newHashedPassword }, { new: true }).exec();

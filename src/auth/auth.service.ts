@@ -49,9 +49,9 @@ export class AuthService {
 
 	async sendOtp(email: string): Promise<{ message: string, otpToken: string }> {
 		try {
-			const user = this.userService.findOneByEmail(email);
+			const user = await this.userService.findOneByEmail(email);
 			if (!user) {
-				throw new Error(`User with this email: ${email} not found`);
+				throw new HttpException(`User with this email: ${email} not found`, HttpStatus.NOT_FOUND);
 			}
 			const otp = await this.otpService.generateOtp();
 			await this.mailService.sendOtp(email, otp)
@@ -74,7 +74,7 @@ export class AuthService {
 			if (isValid) {
 				return isValid;
 			} else {
-				return { message: "Invalid otp" };
+				throw new HttpException("Invalid OTP", HttpStatus.BAD_REQUEST);
 			}
 		} catch (error) {
 			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);

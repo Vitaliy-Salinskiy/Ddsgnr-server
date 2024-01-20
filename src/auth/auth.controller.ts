@@ -42,7 +42,7 @@ export class AuthController {
 		try {
 			const token = await request.cookies['ddsgnr_otp'];
 			if (!token) {
-				return { message: "OTP token not found, please request a new OTP" }
+				throw new HttpException("Your OTP has probably expired. Please request a new one", HttpStatus.BAD_REQUEST);
 			}
 			const validateResponse = await this.authService.validateOtp(otp, token);
 			if (validateResponse === true) {
