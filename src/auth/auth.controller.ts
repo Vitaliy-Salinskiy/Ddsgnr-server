@@ -4,6 +4,7 @@ import { Response, Request as ExpressRequest } from "express"
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -47,6 +48,7 @@ export class AuthController {
 			const validateResponse = await this.authService.validateOtp(otp, token);
 			if (validateResponse === true) {
 				response.cookie("ddsgnr_otp", null, { httpOnly: true, maxAge: 0 });
+				response.cookie("ddsgnr_reset_allow", true, { httpOnly: true, maxAge: 8 * 60 * 1000 });
 			}
 			return response.send(validateResponse);
 		} catch (error) {
@@ -55,8 +57,17 @@ export class AuthController {
 	}
 
 	@Post('reset-password')
-	async resetPassword(@Body() body: { password: string, email: string }) {
-		return this.authService.resetPassword(body.email, body.password);
+	async resetPassword(@Body() dto: ResetPasswordDto, @Req() request: ExpressRequest) {
+		try {
+			const isAllowed = await request.cookies['ddsgnr_reset_allow'];
+			if (isAllowed) {
+				return this.authService.resetPassword(dto.email, dto.password);
+			}
+			throw new HttpException("You are not allowed to reset password, try again later", HttpStatus.BAD_REQUEST);
+		} catch (error) {
+			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
 	}
 
 }
