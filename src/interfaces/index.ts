@@ -19,3 +19,12 @@ export enum ProductType {
 	woman = "woman",
 	kid = "kid"
 }
+
+export enum Sizes {
+	XS = 'XS',
+	S = 'S',
+	M = 'M',
+	L = 'L',
+	XL = 'XL',
+	XXL = 'XXL'
+}

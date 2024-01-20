@@ -11,6 +11,9 @@ export class ProductsController {
 	@Post()
 	@UseInterceptors(FilesInterceptor("images"))
 	create(@Body() createProductDto: CreateProductDto, @UploadedFiles() images: Array<Express.Multer.File>) {
+		createProductDto.sizes = JSON.parse(createProductDto.sizes);
+		createProductDto.colors = JSON.parse(createProductDto.colors);
+
 		return this.productsService.create(createProductDto, images);
 	}
 

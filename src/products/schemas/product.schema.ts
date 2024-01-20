@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
 import { HydratedDocument, Types } from "mongoose"
 
-import { ProductType } from "src/interfaces";
+import { ProductType, Sizes } from "src/interfaces";
 
 export type ProductDocument = HydratedDocument<Product>;
 
@@ -18,6 +18,15 @@ export class Product {
 
 	@Prop({ type: Number, required: true })
 	price: number;
+
+	@Prop({ type: String, trim: true })
+	description: String;
+
+	@Prop({ type: [{ type: String, required: true }] })
+	colors: string[];
+
+	@Prop({ type: [String], enum: Object.values(Sizes), required: true })
+	sizes: string[];
 
 	@Prop({ type: [{ type: String, required: true }] })
 	images: string[];

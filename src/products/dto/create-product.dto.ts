@@ -1,9 +1,12 @@
-import { ProductType } from "src/interfaces";
+import { ProductType, Sizes } from "src/interfaces";
 
 export class CreateProductDto {
 	readonly name: string;
 	readonly brand: string;
-	price: number;
-	images?: string[];
+	colors: string;
+	sizes: Sizes;
 	readonly type: ProductType;
+	readonly description?: string;
+	readonly price: number;
+	images?: string[];
 }
