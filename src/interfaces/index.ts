@@ -7,11 +7,17 @@ export interface IDeleteMessage<T> {
 	};
 }
 
+export interface ProductInCart {
+	productId: string;
+	quantity: number;
+}
+
 export interface IPayload {
 	sub: Types.ObjectId;
 	username: string;
 	email: string;
 	image: string;
+	cart: ProductInCart[]
 }
 
 export enum ProductType {

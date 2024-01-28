@@ -1,10 +1,11 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post, Req, Request, Res, UseGuards, } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Post, Put, Req, Request, Res, UseGuards, } from '@nestjs/common';
 import { Response, Request as ExpressRequest } from "express"
 
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { UserDocument } from 'src/users/schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -69,5 +70,19 @@ export class AuthController {
 
 		}
 	}
+
+	@Put('update-user')
+	async updateUser(@Body() updatedData: Partial<UserDocument>, @Req() request: ExpressRequest, @Res() response: Response) {
+		try {
+			const token = await request.cookies['ddsgnr_access_token'];
+			const result = await this.authService.updateUser(token, updatedData);
+			console.log(result);
+			response.cookie("update-ddsgnr_access_token", false, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+			return result;
+		} catch (error) {
+			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 
 }

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 
 import { CartService } from './cart.service';
 
@@ -7,8 +7,8 @@ export class CartController {
 	constructor(private readonly cartService: CartService) { }
 
 	@Post(":userId/:productId")
-	addToCart(@Param('userId') userId: string, @Param('productId') productId: string) {
-		return this.cartService.addToCart(userId, productId);
+	addToCart(@Param('userId') userId: string, @Param('productId') productId: string, @Query('quantity') quantity?: number) {
+		return this.cartService.addToCart(userId, productId, quantity);
 	}
 
 	@Get(":userId")

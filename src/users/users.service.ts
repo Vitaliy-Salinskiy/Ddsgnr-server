@@ -49,7 +49,6 @@ export class UsersService {
 	async findOne(id: string): Promise<UserDocument> {
 		try {
 			const user = await this.userRepository.findById(id).populate("cart").exec();
-			console.log(user);
 
 			if (!user) {
 				throw new HttpException(`User with id: ${id} not found`, HttpStatus.NOT_FOUND)

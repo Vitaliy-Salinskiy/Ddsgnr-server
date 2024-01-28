@@ -5,6 +5,15 @@ import { Product } from "src/products/schemas/product.schema";
 export type UserDocument = HydratedDocument<User>;
 
 @Schema()
+class ProductInCart {
+	@Prop({ type: Types.ObjectId, ref: Product.name, unique: true, required: true })
+	productId: string;
+
+	@Prop({ type: Number, required: true, default: 1 })
+	quantity: number;
+}
+
+@Schema()
 export class User {
 
 	readonly _id: Types.ObjectId;
@@ -24,8 +33,11 @@ export class User {
 	@Prop({ type: Date, default: Date.now })
 	createdAt: Date;
 
-	@Prop({ type: [{ type: Types.ObjectId, ref: Product.name }], default: [] })
-	cart: Types.ObjectId[]
+	@Prop({
+		type: [ProductInCart],
+		default: []
+	})
+	cart: ProductInCart[]
 
 }
 

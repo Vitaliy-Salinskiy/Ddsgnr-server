@@ -38,7 +38,7 @@ export class AuthService {
 			if (user.image) {
 				image = user.image;
 			}
-			const payload: IPayload = { username: user.username, email: user.email, sub: user._id, image };
+			const payload: IPayload = { username: user.username, email: user.email, sub: user._id, image, cart: user.cart };
 			return {
 				access_token: this.jwtService.sign(payload),
 			};
@@ -89,6 +89,30 @@ export class AuthService {
 			}
 			await this.userService.resetPassword(user._id.toString(), password);
 			return { message: "Password reset successfully" };
+		} catch (error) {
+			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	async updateUser(token: string, updatedData: Partial<UserDocument>) {
+		try {
+			const decoded: IPayload = this.jwtService.decode(token);
+			const userId = decoded.sub;
+
+			const user = await this.userService.findOne(userId.toString());
+			if (!user) {
+				throw new HttpException("User not found", HttpStatus.NOT_FOUND);
+			}
+
+			for (const key in updatedData) {
+				user[key] = updatedData[key];
+			}
+
+			await user.save();
+
+			const newToken = this.jwtService.sign({ userId: user._id, ...updatedData });
+
+			return { token: newToken };
 		} catch (error) {
 			throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
