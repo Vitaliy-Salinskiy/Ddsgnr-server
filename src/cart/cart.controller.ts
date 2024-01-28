@@ -1,28 +1,54 @@
-import { Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query, Request, UseGuards } from '@nestjs/common';
 
 import { CartService } from './cart.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Request as ExpressRequest } from 'express';
 
 @Controller('cart')
 export class CartController {
 	constructor(private readonly cartService: CartService) { }
 
-	@Post(":userId/:productId")
-	addToCart(@Param('userId') userId: string, @Param('productId') productId: string, @Query('quantity') quantity?: number) {
+	@UseGuards(JwtAuthGuard)
+	@Post(":productId")
+	addToCart(@Request() req: ExpressRequest, @Param('productId') productId: string, @Query('quantity') quantity?: number) {
+		if (!req.user || !req.user['userId']) {
+			throw new HttpException('User not authenticated', HttpStatus.UNAUTHORIZED);
+		}
+
+		const userId = req.user['userId'];
 		return this.cartService.addToCart(userId, productId, quantity);
 	}
 
-	@Get(":userId")
-	getCart(@Param('userId') userId: string) {
+	@UseGuards(JwtAuthGuard)
+	@Get()
+	getCart(@Request() req: ExpressRequest) {
+		if (!req.user || !req.user['userId']) {
+			throw new HttpException('User not authenticated', HttpStatus.UNAUTHORIZED);
+		}
+
+		const userId = req.user['userId'];
 		return this.cartService.getCart(userId);
 	}
 
-	@Put(":userId/:productId")
-	removeFromCart(@Param('userId') userId: string, @Param('productId') productId: string) {
+	@UseGuards(JwtAuthGuard)
+	@Put(":productId")
+	removeFromCart(@Request() req: ExpressRequest, @Param('productId') productId: string) {
+		if (!req.user || !req.user['userId']) {
+			throw new HttpException('User not authenticated', HttpStatus.UNAUTHORIZED);
+		}
+
+		const userId = req.user['userId'];
 		return this.cartService.removeFromCart(userId, productId);
 	}
 
-	@Delete(":userId")
-	clearCart(@Param('userId') userId: string) {
+	@UseGuards(JwtAuthGuard)
+	@Delete()
+	clearCart(@Request() req: ExpressRequest) {
+		if (!req.user || !req.user['userId']) {
+			throw new HttpException('User not authenticated', HttpStatus.UNAUTHORIZED);
+		}
+
+		const userId = req.user['userId'];
 		return this.cartService.clearCart(userId);
 	}
 

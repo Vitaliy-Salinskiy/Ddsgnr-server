@@ -17,7 +17,7 @@ export class AuthController {
 		try {
 			const loginResult = await this.authService.login(req.user);
 			if (loginResult) {
-				res.cookie("ddsgnr_access_token", loginResult.access_token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
+				req.session.token = loginResult.access_token;
 				return res.json(loginResult);
 			}
 			return res.json(loginResult);

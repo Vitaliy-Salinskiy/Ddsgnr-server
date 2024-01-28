@@ -11,8 +11,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		super({
 			jwtFromRequest: (req: Request) => {
 				let token: null | string = null;
-				if (req && req.cookies) {
-					token = req.cookies["ddsgnr_access_token"];
+				if (req && req.session) {
+					token = req.session["token"];
 				}
 				return token;
 			},
